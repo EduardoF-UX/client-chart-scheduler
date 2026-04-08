@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kipu EMR — Scheduler · New Appointment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --purple-main: #6c18c9;
+      --blue-main: #1565c0;
+      --gray-black: #000000;
+      --gray-07: #333333;
+      --gray-06: #666666;
+      --gray-05: #999999;
+      --gray-04: #cccccc;
+      --gray-03: #ececec;
+      --white: #ffffff;
+      --light-blue-300: #dbeafe;
+      /* Figma Light Blue / light blue-500-main — large switch track when ON */
+      --light-blue-500-main: #cadffe;
+      /* Big Button / interactive hover (Kipu DS) */
+      --blue-hover: #0f4888;
+      --blue-tint-hover-bg: #eff5ff;
+      --purple-hover: #4d118f;
+      --shadow-modal: 0 2px 20px rgba(0, 0, 0, 0.08);
+      --shadow-elevated: 0 4px 32px rgba(0, 0, 0, 0.1);
+      --shadow-nav: 0 2px 16px rgba(0, 0, 0, 0.08);
+      --font-body: 14px/20px "Roboto", system-ui, sans-serif;
+      --font-title: 16px/20px "Roboto", system-ui, sans-serif;
+      --font-caption: 12px/14px "Roboto", system-ui, sans-serif;
+      --font-h2: 700 24px/28px "Roboto", system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: var(--font-body);
+      color: var(--gray-black);
+      background: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      isolation: isolate;
+    }
+
+    /* Main stage (dim + modal): full width; padding keeps modal off edges and adds room below */
+    .app-main {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      min-height: calc(100vh - 110px);
+      padding: 24px 16px 96px;
+      box-sizing: border-box;
+      background: var(--white);
+    }
+
+    /* —— Header —— */
+    .global-header {
+      width: 100%;
+      height: 70px;
+      position: relative;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      padding: 0 13px 0 14px;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .global-header__bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top left;
+      z-index: 0;
+    }
+    .global-header__left {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      flex: 0 1 auto;
+      min-width: 0;
+    }
+    .app-grid-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      background: var(--purple-main);
+      display: grid;
+      place-items: center;
+      border: none;
+      padding: 0;
+      cursor: default;
+    }
+    .app-grid-btn img {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      max-width: 24px;
+      max-height: 24px;
+      display: block;
+      flex-shrink: 0;
+      object-fit: contain;
+      aspect-ratio: 1;
+    }
+    .logo-lockup {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 0;
+      flex-shrink: 0;
+    }
+    .logo-lockup img { height: 22px; width: auto; display: block; }
+    .logo-lockup span {
+      font-weight: 300;
+      font-size: 24px;
+      line-height: 1;
+      color: var(--white);
+    }
+
+    .facility-pill {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      height: 40px;
+      min-width: min(380px, 100%);
+      max-width: 380px;
+      flex: 0 1 auto;
+      margin-left: 8px;
+      padding: 0 14px;
+      background: var(--purple-main);
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 20px;
+      gap: 12px;
+    }
+    .facility-pill__location {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 0 1 auto;
+      min-width: 0;
+    }
+    .facility-pill__time {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .facility-pill__divider {
+      width: 1px;
+      height: 25px;
+      background: rgba(255, 255, 255, 0.35);
+      margin: 0 4px;
+    }
+    .facility-pill__chev {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      flex-shrink: 0;
+      margin-left: auto;
+      display: grid;
+      place-items: center;
+    }
+    .facility-pill__chev img {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      max-width: 24px;
+      max-height: 24px;
+      display: block;
+      object-fit: contain;
+      aspect-ratio: 1;
+      filter: brightness(0) invert(1);
+    }
+
+    .global-header__right {
+      position: relative;
+      z-index: 1;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .icon-chip {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      border-radius: 50%;
+      transition: background-color 0.15s ease;
+    }
+    .icon-chip:hover {
+      background: var(--purple-hover);
+    }
+    .icon-chip img {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      max-width: 24px;
+      max-height: 24px;
+      display: block;
+      flex-shrink: 0;
+      object-fit: contain;
+      aspect-ratio: 1;
+    }
+
+    .company-badge {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 5px 10px;
+      height: 50px;
+      width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .company-badge img {
+      max-width: 80px;
+      max-height: 40px;
+      object-fit: contain;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .avatar__ring {
+      position: absolute;
+      inset: 0;
+      width: 44px;
+      height: 44px;
+    }
+    .avatar__inner {
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 36px;
+      height: 36px;
+    }
+    .avatar__initials {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    /* —— Sub navigation —— */
+    .subnav {
+      width: 100%;
+      height: 40px;
+      position: relative;
+      z-index: 19;
+      background: var(--white);
+      box-shadow: var(--shadow-nav);
+      display: flex;
+      align-items: stretch;
+      padding: 0 0 0 14px;
+      flex-shrink: 0;
+    }
+    .subnav__tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--gray-black);
+      background: none;
+      border: none;
+      border-bottom: 4px solid transparent;
+      cursor: default;
+      font-family: inherit;
+    }
+    .subnav__tab--active {
+      color: var(--blue-main);
+      border-bottom-color: var(--blue-main);
+    }
+
+    /* —— Overlay + modal —— */
+    .overlay-dim {
+      position: absolute;
+      inset: 0;
+      width: auto;
+      height: auto;
+      min-height: 100%;
+      background: var(--gray-07);
+      opacity: 0.2;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .modal-wrap {
+      position: relative;
+      z-index: 10;
+      width: min(1580px, calc(100% - 32px));
+      max-width: 1580px;
+      margin: 0 auto;
+      filter: drop-shadow(0 2px 20px rgba(0, 0, 0, 0.08));
+    }
+
+    .scheduler-modal {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      min-height: 906px;
+    }
+
+    .scheduler-modal__title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 26px 32px 0;
+    }
+    .scheduler-modal__title {
+      font: var(--font-h2);
+      margin: 0;
+      color: var(--gray-black);
+    }
+    .icon-btn-close {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .icon-btn-close img,
+    .icon-btn-close svg {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      display: block;
+    }
+
+    .modal-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 33px;
+      margin-top: 12px;
+    }
+    .modal-tabs__tab {
+      padding: 14px 24px;
+      font-size: 16px;
+      line-height: 24px;
+      font-family: inherit;
+      background: none;
+      border: none;
+      border-bottom: 4px solid transparent;
+      color: var(--gray-black);
+      cursor: default;
+    }
+    .modal-tabs__tab--active {
+      color: var(--blue-main);
+      border-bottom-color: var(--blue-main);
+    }
+
+    .modal-tabs__rule {
+      height: 1px;
+      background: var(--gray-04);
+      margin: 0 32px;
+    }
+
+    .modal-body {
+      padding: 12px 32px 32px;
+    }
+
+    .form-card {
+      position: relative;
+      background: var(--white);
+      border: 2px solid var(--white);
+      border-radius: 8px;
+      box-shadow: var(--shadow-modal);
+      padding: 24px 24px 28px;
+      margin-top: 8px;
+    }
+
+    .form-card__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .form-card__title {
+      font: var(--font-h2);
+      margin: 0;
+    }
+
+    .form-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1450px;
+      margin: 0 auto;
+    }
+
+    .row-switch {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .row-switch--tight { gap: 10px; }
+
+    /* Switches */
+    .switch {
+      position: relative;
+      width: 34px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    /*
+     * Large switch ON: Figma Scheduler — node 354:15587 (Switches / 300:6505 type On).
+     * Frame 56×40; track 30×14 #CADFFE at left 13px top 13px; thumb 22×22 at left 25px top 9px (solid blue).
+     */
+    .switch--lg {
+      width: 56px;
+      height: 40px;
+      overflow: visible;
+    }
+    .switch__track {
+      position: absolute;
+      right: 0;
+      top: 4px;
+      width: 30px;
+      height: 14px;
+      background: var(--gray-04);
+      border-radius: 7px;
+    }
+    .switch--lg .switch__track {
+      left: 13px;
+      right: auto;
+      top: 13px;
+    }
+    .switch__thumb {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+    }
+    .switch--lg .switch__thumb {
+      left: 9px;
+      top: 9px;
+    }
+    .switch__thumb-inner {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--white);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    button.switch {
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+    }
+    button.switch:focus-visible {
+      outline: 2px solid var(--blue-main);
+      outline-offset: 2px;
+    }
+    .switch.switch--lg[aria-checked="true"] .switch__track {
+      left: 13px;
+      right: auto;
+      top: 13px;
+      background-color: var(--light-blue-500-main);
+    }
+    .switch.switch--lg[aria-checked="true"] .switch__thumb {
+      left: 25px;
+      right: auto;
+      top: 9px;
+    }
+    .switch.switch--lg[aria-checked="true"] .switch__thumb-inner {
+      background: var(--blue-main);
+      border: none;
+      box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.12),
+        0 3px 8px rgba(21, 101, 192, 0.28);
+    }
+
+    .field-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .field-row--time {
+      gap: 25px;
+      align-items: center;
+    }
+
+    .outlined-field {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+    .outlined-field--loc { flex: 1 1 1083px; max-width: 1083px; }
+    .outlined-field--sm { flex: 0 0 351px; max-width: 351px; }
+    .outlined-field--time { flex: 0 0 200px; max-width: 200px; }
+    .outlined-field--full { width: 100%; }
+
+    /* Ensure flex on .outlined-field cannot show this block while switch is off */
+    #external-contact-field[hidden] {
+      display: none !important;
+    }
+
+    /* Same focused field look as Location (2px blue); no extra outline so it matches the static Location chrome */
+    button.outlined-field__box--focus:focus-visible {
+      outline: none;
+    }
+
+    /* Figma: with External ON, Location uses default gray border/label (focus moves to External Contact) */
+    .form-card[data-external-appointment="on"] #location-field .outlined-field__box--focus {
+      border-width: 1px;
+      border-color: var(--gray-04);
+      padding: 14px 10px 12px 14px;
+    }
+    .form-card[data-external-appointment="on"] #location-field .outlined-field__label--focus {
+      color: var(--gray-06);
+    }
+
+    .outlined-field__label {
+      position: absolute;
+      left: 12px;
+      top: 0;
+      transform: translateY(-50%);
+      z-index: 1;
+      background: var(--white);
+      padding: 0 4px;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 12px;
+      color: var(--gray-06);
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      max-width: calc(100% - 24px);
+      pointer-events: none;
+    }
+    .outlined-field__label--focus {
+      color: var(--blue-main);
+    }
+
+    .outlined-field__box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 14px 10px 12px 14px;
+      border: 1px solid var(--gray-04);
+      border-radius: 4px;
+      background: var(--white);
+    }
+    .outlined-field__box--focus {
+      border-width: 2px;
+      border-color: var(--blue-main);
+      padding: 13px 9px 11px 13px;
+    }
+
+    button.outlined-field__box {
+      width: 100%;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      box-sizing: border-box;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    button.outlined-field__box:focus-visible {
+      outline: 2px solid var(--blue-main);
+      outline-offset: 2px;
+      border-color: var(--blue-main);
+    }
+
+    .outlined-field__value {
+      flex: 1;
+      min-width: 0;
+      font-size: 16px;
+      line-height: 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .outlined-field__value--muted { color: var(--gray-05); }
+    .outlined-field__value--dark { color: var(--gray-black); }
+
+    .outlined-field__icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+    }
+    .outlined-field__icon--clock {
+      width: 18px;
+      height: 18px;
+    }
+    .outlined-field__icon img,
+    .outlined-field__icon--clock img {
+      width: 18px;
+      height: 18px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .info-banner__icon img {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+
+    .info-banner {
+      flex: 1 1 546px;
+      max-width: 546px;
+      min-height: 46px;
+      background: var(--light-blue-300);
+      border-radius: 8px;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .info-banner__icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .info-banner__icon img { width: 100%; height: 100%; display: block; }
+    .info-banner__text {
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--gray-black);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--gray-04);
+      width: 100%;
+    }
+
+    .textarea-wrap {
+      position: relative;
+      width: 100%;
+      min-height: 97px;
+    }
+    .textarea-box {
+      position: absolute;
+      inset: 7px 0 0 0;
+      border: 1px solid var(--gray-04);
+      border-radius: 4px;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      min-height: 90px;
+    }
+    .textarea-box__main {
+      padding: 14px 12px 4px;
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--gray-05);
+    }
+    .textarea-box__grab {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 4px 4px;
+    }
+    .textarea-resize-grip {
+      width: 10px;
+      height: 10px;
+      opacity: 0.55;
+      background: linear-gradient(
+        135deg,
+        transparent 0%,
+        transparent 35%,
+        var(--gray-04) 35%,
+        var(--gray-04) 40%,
+        transparent 40%,
+        transparent 55%,
+        var(--gray-04) 55%,
+        var(--gray-04) 60%,
+        transparent 60%,
+        transparent 75%,
+        var(--gray-04) 75%,
+        var(--gray-04) 80%,
+        transparent 80%
+      );
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 18px;
+      margin-top: 24px;
+      padding-right: 8px;
+    }
+    /* Big Button — Roboto Medium 16px uppercase, height 40px, pill 100px */
+    .btn {
+      min-width: 120px;
+      height: 40px;
+      border-radius: 100px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 20px;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn--text {
+      background: transparent;
+      border: 2px solid transparent;
+      color: var(--blue-main);
+    }
+    .btn--text:hover {
+      background: var(--blue-tint-hover-bg);
+      color: var(--blue-hover);
+    }
+    .btn--outline {
+      background: transparent;
+      border: 2px solid var(--blue-main);
+      color: var(--blue-main);
+    }
+    .btn--outline:hover {
+      background: var(--blue-tint-hover-bg);
+      border-color: var(--blue-hover);
+      color: var(--blue-hover);
+    }
+    .btn--filled {
+      background: var(--blue-main);
+      border: 2px solid var(--blue-main);
+      color: var(--white);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    }
+    .btn--filled:hover {
+      background: var(--blue-hover);
+      border-color: var(--blue-hover);
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 1200px) {
+      .facility-pill {
+        margin-left: 0;
+        margin-top: 4px;
+        flex-basis: 100%;
+        max-width: none;
+      }
+      .global-header {
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 70px;
+        padding-bottom: 8px;
+      }
+      .app-main {
+        padding: 16px 12px 72px;
+        min-height: calc(100vh - 100px);
+      }
+      .field-row--time { flex-direction: column; align-items: stretch; }
+      .info-banner { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Full-bleed chrome; .app-main is full-width (dim + modal) -->
+  <header class="global-header">
+      <img class="global-header__bg" src="https://www.figma.com/api/mcp/asset/aebdbbb3-2db9-4062-9ac5-60fd54d304ab" alt="" width="1920" height="70" />
+      <div class="global-header__left">
+        <button type="button" class="app-grid-btn" aria-label="App menu">
+          <img src="assets/header-apps.svg" alt="" width="24" height="24" />
+        </button>
+        <div class="logo-lockup">
+          <img src="https://www.figma.com/api/mcp/asset/6caab47d-0df4-4040-b0ef-2aba1b74eb41" alt="Kipu" />
+          <span>EMR</span>
+        </div>
+        <div class="facility-pill" role="group" aria-label="Facility and time">
+          <span class="facility-pill__location">West Palm Beach Treatment...</span>
+          <span class="facility-pill__divider" aria-hidden="true"></span>
+          <span class="facility-pill__time">9:42 AM EDT</span>
+          <span class="facility-pill__chev" aria-hidden="true">
+            <img src="assets/menu-down.svg" alt="" width="24" height="24" />
+          </span>
+        </div>
+      </div>
+      <div class="global-header__right">
+        <div class="icon-chip" aria-hidden="true">
+          <img src="assets/header-search.svg" alt="" width="24" height="24" />
+        </div>
+        <div class="icon-chip" aria-hidden="true">
+          <img src="assets/header-contact.svg" alt="" width="24" height="24" />
+        </div>
+        <div class="icon-chip" aria-hidden="true">
+          <img src="assets/header-notifications.svg" alt="" width="24" height="24" />
+        </div>
+        <div class="icon-chip" aria-hidden="true">
+          <img src="assets/header-download.svg" alt="" width="24" height="24" />
+        </div>
+        <div class="icon-chip" aria-hidden="true">
+          <img src="assets/header-email.svg" alt="" width="24" height="24" />
+        </div>
+        <div class="company-badge">
+          <img src="https://www.figma.com/api/mcp/asset/d9ef3756-c78b-4c24-ad87-8338077b9ad7" alt="Canyon Vista" />
+        </div>
+        <div class="avatar" aria-hidden="true">
+          <img class="avatar__ring" src="https://www.figma.com/api/mcp/asset/5363b44a-1cd6-4b13-9775-a85cabde4b6d" alt="" />
+          <img class="avatar__inner" src="https://www.figma.com/api/mcp/asset/8b08b2bb-1008-4424-abe4-324bc742fe3c" alt="" />
+          <span class="avatar__initials">EF</span>
+        </div>
+      </div>
+    </header>
+
+    <nav class="subnav" aria-label="Main">
+      <button type="button" class="subnav__tab">Dashboard</button>
+      <button type="button" class="subnav__tab subnav__tab--active" aria-current="page">Patients</button>
+      <button type="button" class="subnav__tab">Schedules</button>
+      <button type="button" class="subnav__tab">Shifts</button>
+      <button type="button" class="subnav__tab">Contacts</button>
+      <button type="button" class="subnav__tab">Labs</button>
+      <button type="button" class="subnav__tab">Reports</button>
+      <button type="button" class="subnav__tab">Templates</button>
+      <button type="button" class="subnav__tab">Queues</button>
+      <button type="button" class="subnav__tab">Inventory</button>
+      <button type="button" class="subnav__tab">Help</button>
+    </nav>
+
+  <div class="app-main">
+    <div class="overlay-dim" aria-hidden="true"></div>
+
+    <div class="modal-wrap">
+      <section class="scheduler-modal" aria-labelledby="scheduler-title">
+        <div class="scheduler-modal__title-row">
+          <h1 id="scheduler-title" class="scheduler-modal__title">Scheduler</h1>
+          <button type="button" class="icon-btn-close" aria-label="Close scheduler">
+            <img src="assets/close.svg" alt="" width="24" height="24" />
+          </button>
+        </div>
+        <div class="modal-tabs" role="tablist">
+          <button type="button" class="modal-tabs__tab modal-tabs__tab--active" role="tab" aria-selected="true">Appointments</button>
+          <button type="button" class="modal-tabs__tab" role="tab" aria-selected="false">Assigned Sessions</button>
+          <button type="button" class="modal-tabs__tab" role="tab" aria-selected="false">Combined Schedules</button>
+        </div>
+        <div class="modal-tabs__rule" role="presentation"></div>
+
+        <div class="modal-body">
+          <div class="form-card" data-external-appointment="off">
+            <div class="form-card__head">
+              <h2 class="form-card__title">New Appointment</h2>
+              <button type="button" class="icon-btn-close" aria-label="Close new appointment">
+                <img src="assets/close.svg" alt="" width="24" height="24" />
+              </button>
+            </div>
+
+            <div class="form-stack">
+              <div class="row-switch">
+                <button
+                  type="button"
+                  class="switch switch--lg"
+                  id="external-appointment-switch"
+                  role="switch"
+                  aria-checked="false"
+                  aria-labelledby="external-appointment-label"
+                >
+                  <span class="switch__track" aria-hidden="true"></span>
+                  <span class="switch__thumb" aria-hidden="true"><span class="switch__thumb-inner"></span></span>
+                </button>
+                <span id="external-appointment-label">External Appointment</span>
+              </div>
+
+              <div
+                id="external-contact-field"
+                class="outlined-field outlined-field--full"
+                hidden
+              >
+                <span class="outlined-field__label outlined-field__label--focus" id="external-contact-label">
+                  External Contact <span aria-hidden="true">*</span>
+                </span>
+                <button
+                  type="button"
+                  class="outlined-field__box outlined-field__box--focus"
+                  id="external-contact-trigger"
+                  aria-labelledby="external-contact-label"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                >
+                  <span class="outlined-field__value outlined-field__value--muted">Select External Contact</span>
+                  <span class="outlined-field__icon"><img src="assets/menu-down.svg" alt="" width="18" height="18" /></span>
+                </button>
+              </div>
+
+              <div class="field-row">
+                <div class="outlined-field outlined-field--loc" id="location-field">
+                  <span class="outlined-field__label outlined-field__label--focus">Location</span>
+                  <div class="outlined-field__box outlined-field__box--focus">
+                    <span class="outlined-field__value outlined-field__value--muted">West Palm Beach Center</span>
+                    <span class="outlined-field__icon"><img src="assets/menu-down.svg" alt="" width="18" height="18" /></span>
+                  </div>
+                </div>
+                <div class="outlined-field outlined-field--sm">
+                  <span class="outlined-field__label">Appointment Types *</span>
+                  <div class="outlined-field__box">
+                    <span class="outlined-field__value outlined-field__value--dark">Individual Sessions</span>
+                    <span class="outlined-field__icon"><img src="assets/menu-down.svg" alt="" width="18" height="18" /></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-row field-row--time">
+                <div class="outlined-field outlined-field--time">
+                  <div class="outlined-field__box">
+                    <span class="outlined-field__value outlined-field__value--muted">Date</span>
+                    <span class="outlined-field__icon"><img src="assets/calendar.svg" alt="" width="18" height="18" /></span>
+                  </div>
+                </div>
+                <div class="outlined-field outlined-field--time">
+                  <div class="outlined-field__box">
+                    <span class="outlined-field__value outlined-field__value--muted">Start Time</span>
+                    <span class="outlined-field__icon outlined-field__icon--clock"><img src="assets/history.svg" alt="" width="18" height="18" /></span>
+                  </div>
+                </div>
+                <div class="outlined-field outlined-field--time">
+                  <div class="outlined-field__box">
+                    <span class="outlined-field__value outlined-field__value--muted">End Time</span>
+                    <span class="outlined-field__icon outlined-field__icon--clock"><img src="assets/history.svg" alt="" width="18" height="18" /></span>
+                  </div>
+                </div>
+                <div class="outlined-field outlined-field--time">
+                  <span class="outlined-field__label">Duration</span>
+                  <div class="outlined-field__box">
+                    <span class="outlined-field__value outlined-field__value--dark">1</span>
+                    <span class="outlined-field__icon outlined-field__icon--clock"><img src="assets/history.svg" alt="" width="18" height="18" /></span>
+                  </div>
+                </div>
+                <div class="info-banner" role="status">
+                  <span class="info-banner__icon"><img src="assets/information-outline.svg" alt="" width="24" height="24" /></span>
+                  <p class="info-banner__text">Location Specific Time Zone: EST</p>
+                </div>
+              </div>
+
+              <div class="outlined-field outlined-field--full">
+                <div class="outlined-field__box">
+                  <span class="outlined-field__value outlined-field__value--muted">Appointment Subject</span>
+                </div>
+              </div>
+
+              <div class="row-switch row-switch--tight">
+                <div class="switch" aria-hidden="true">
+                  <div class="switch__track"></div>
+                  <div class="switch__thumb"><span class="switch__thumb-inner"></span></div>
+                </div>
+                <span>Recurrence</span>
+              </div>
+
+              <div class="divider" role="presentation"></div>
+
+              <div class="outlined-field outlined-field--full">
+                <span class="outlined-field__label">Patient <span aria-hidden="true">*</span></span>
+                <div class="outlined-field__box">
+                  <span class="outlined-field__value outlined-field__value--muted">Select a Patient...</span>
+                  <span class="outlined-field__icon"><img src="assets/menu-down.svg" alt="" width="18" height="18" /></span>
+                </div>
+              </div>
+
+              <div class="row-switch row-switch--tight">
+                <div class="switch" aria-hidden="true">
+                  <div class="switch__track"></div>
+                  <div class="switch__thumb"><span class="switch__thumb-inner"></span></div>
+                </div>
+                <span>Add Patients Contact</span>
+              </div>
+
+              <div class="divider" role="presentation"></div>
+
+              <div class="field-row">
+                <div class="outlined-field outlined-field--loc">
+                  <div class="outlined-field__box">
+                    <span class="outlined-field__value outlined-field__value--muted">Resources</span>
+                    <span class="outlined-field__icon"><img src="assets/menu-down.svg" alt="" width="18" height="18" /></span>
+                  </div>
+                </div>
+                <div class="outlined-field outlined-field--sm">
+                  <div class="outlined-field__box">
+                    <span class="outlined-field__value outlined-field__value--muted">Rooms</span>
+                    <span class="outlined-field__icon"><img src="assets/menu-down.svg" alt="" width="18" height="18" /></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="textarea-wrap">
+                <div class="textarea-box">
+                  <div class="textarea-box__main">Notes</div>
+                  <div class="textarea-box__grab">
+                    <span class="textarea-resize-grip" aria-hidden="true"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row-switch row-switch--tight">
+                <div class="switch" aria-hidden="true">
+                  <div class="switch__track"></div>
+                  <div class="switch__thumb"><span class="switch__thumb-inner"></span></div>
+                </div>
+                <span>Telehealth Visit</span>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn--text">cancel</button>
+              <button type="button" class="btn btn--outline">draft</button>
+              <button type="button" class="btn btn--filled">save</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var toggle = document.getElementById("external-appointment-switch");
+      var panel = document.getElementById("external-contact-field");
+      var contactTrigger = document.getElementById("external-contact-trigger");
+      var formCard = document.querySelector(".form-card");
+      if (!toggle || !panel) return;
+
+      function setExternalAppointmentOn(isOn) {
+        toggle.setAttribute("aria-checked", isOn ? "true" : "false");
+        panel.hidden = !isOn;
+        panel.setAttribute("aria-hidden", isOn ? "false" : "true");
+        if (formCard) {
+          formCard.setAttribute("data-external-appointment", isOn ? "on" : "off");
+        }
+        if (!isOn && contactTrigger && document.activeElement === contactTrigger) {
+          contactTrigger.blur();
+        }
+        if (isOn && contactTrigger) {
+          requestAnimationFrame(function () {
+            contactTrigger.focus();
+          });
+        }
+      }
+
+      toggle.addEventListener("click", function () {
+        var nextOn = toggle.getAttribute("aria-checked") !== "true";
+        setExternalAppointmentOn(nextOn);
+      });
+
+      /* Off by default: dropdown stays hidden until switch is turned on */
+      setExternalAppointmentOn(false);
+    })();
+  </script>
+</body>
+</html>
