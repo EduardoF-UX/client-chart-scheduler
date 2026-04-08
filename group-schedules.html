@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kipu EMR — Scheduler · Group Schedules</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/app.css" />
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" class="schedule-card-icon-sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="schedule-icon-refresh" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 20C9.76667 20 7.875 19.225 6.325 17.675C4.775 16.125 4 14.2333 4 12C4 9.76667 4.775 7.875 6.325 6.325C7.875 4.775 9.76667 4 12 4C13.15 4 14.25 4.2375 15.3 4.7125C16.35 5.1875 17.25 5.86667 18 6.75V5C18 4.71667 18.0958 4.47917 18.2875 4.2875C18.4792 4.09583 18.7167 4 19 4C19.2833 4 19.5208 4.09583 19.7125 4.2875C19.9042 4.47917 20 4.71667 20 5V10C20 10.2833 19.9042 10.5208 19.7125 10.7125C19.5208 10.9042 19.2833 11 19 11H14C13.7167 11 13.4792 10.9042 13.2875 10.7125C13.0958 10.5208 13 10.2833 13 10C13 9.71667 13.0958 9.47917 13.2875 9.2875C13.4792 9.09583 13.7167 9 14 9H17.2C16.6667 8.06667 15.9375 7.33333 15.0125 6.8C14.0875 6.26667 13.0833 6 12 6C10.3333 6 8.91667 6.58333 7.75 7.75C6.58333 8.91667 6 10.3333 6 12C6 13.6667 6.58333 15.0833 7.75 16.25C8.91667 17.4167 10.3333 18 12 18C13.1333 18 14.1708 17.7125 15.1125 17.1375C16.0542 16.5625 16.7833 15.7917 17.3 14.825C17.4333 14.5917 17.6208 14.4292 17.8625 14.3375C18.1042 14.2458 18.35 14.2417 18.6 14.325C18.8667 14.4083 19.0583 14.5833 19.175 14.85C19.2917 15.1167 19.2833 15.3667 19.15 15.6C18.4667 16.9333 17.4917 18 16.225 18.8C14.9583 19.6 13.55 20 12 20Z" />
+      </symbol>
+      <symbol id="schedule-icon-calendar" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M19 4H18V2H16V4H8V2H6V4H5C3.89 4 3.01 4.9 3.01 6L3 20C3 21.1 3.89 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 20H5V10H19V20ZM19 8H5V6H19V8ZM12 13H17V18H12V13Z" />
+      </symbol>
+      <symbol id="schedule-icon-edit" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M14.06 9.02L14.98 9.94L5.92 19H5V18.08L14.06 9.02ZM17.66 3C17.41 3 17.15 3.1 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C18.17 3.09 17.92 3 17.66 3ZM14.06 6.19L3 17.25V21H6.75L17.81 9.94L14.06 6.19Z" />
+      </symbol>
+      <symbol id="schedule-icon-delete" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M14.12 9.47L12 11.59L9.87 9.47L8.46 10.88L10.59 13L8.47 15.12L9.88 16.53L12 14.41L14.12 16.53L15.53 15.12L13.41 13L15.53 10.88L14.12 9.47ZM15.5 3L14.5 2H9.5L8.5 3H5V5H19V3H15.5ZM6 18C6 18.5304 6.21071 19.0391 6.58579 19.4142C6.96086 19.7893 7.46957 20 8 20H16C16.5304 20 17.0391 19.7893 17.4142 19.4142C17.7893 19.0391 18 18.5304 18 18V6H6V18ZM8 8H16V18H8V8Z" />
+      </symbol>
+      <symbol id="schedule-icon-chevron-up" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M15.8792 14.7092L11.9992 10.8292L8.11921 14.7092C7.92791 14.873 7.68183 14.9586 7.43015 14.9489C7.17848 14.9392 6.93974 14.8348 6.76164 14.6568C6.58355 14.4787 6.47922 14.2399 6.4695 13.9882C6.45977 13.7366 6.54538 13.4905 6.70921 13.2992L11.2992 8.70919C11.4866 8.52294 11.74 8.41839 12.0042 8.41839C12.2684 8.41839 12.5218 8.52294 12.7092 8.70919L17.2992 13.2992C17.4855 13.4865 17.59 13.74 17.59 14.0042C17.59 14.2684 17.4855 14.5218 17.2992 14.7092C17.1093 14.8944 16.8545 14.998 16.5892 14.998C16.3239 14.998 16.0691 14.8944 15.8792 14.7092Z" />
+      </symbol>
+      <symbol id="schedule-icon-chevron-down" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M15.8792 9.29081L11.9992 13.1708L8.11921 9.29081C7.92791 9.12699 7.68183 9.04138 7.43015 9.0511C7.17848 9.06082 6.93974 9.16515 6.76164 9.34325C6.58355 9.52134 6.47922 9.76008 6.4695 10.0118C6.45977 10.2634 6.54538 10.5095 6.70921 10.7008L11.2992 15.2908C11.4866 15.4771 11.74 15.5816 12.0042 15.5816C12.2684 15.5816 12.5218 15.4771 12.7092 15.2908L17.2992 10.7008C17.4855 10.5135 17.59 10.26 17.59 9.99581C17.59 9.73163 17.4855 9.47817 17.2992 9.29081C17.1093 9.10561 16.8545 9.00195 16.5892 9.00195C16.3239 9.00195 16.0691 9.10561 15.8792 9.29081Z" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="global-header">
+    <img class="global-header__bg" src="https://www.figma.com/api/mcp/asset/aebdbbb3-2db9-4062-9ac5-60fd54d304ab" alt="" width="1920" height="70" />
+    <div class="global-header__left">
+      <button type="button" class="app-grid-btn" aria-label="App menu">
+        <img src="assets/header-apps.svg" alt="" width="24" height="24" />
+      </button>
+      <div class="logo-lockup">
+        <img src="https://www.figma.com/api/mcp/asset/6caab47d-0df4-4040-b0ef-2aba1b74eb41" alt="Kipu" />
+        <span>EMR</span>
+      </div>
+      <div class="facility-pill" role="group" aria-label="Facility and time">
+        <span class="facility-pill__location">West Palm Beach Treatment...</span>
+        <span class="facility-pill__divider" aria-hidden="true"></span>
+        <span class="facility-pill__time">9:42 AM EDT</span>
+        <span class="facility-pill__chev" aria-hidden="true">
+          <img src="assets/menu-down.svg" alt="" width="24" height="24" />
+        </span>
+      </div>
+    </div>
+    <div class="global-header__right">
+      <div class="icon-chip" aria-hidden="true">
+        <img src="assets/header-search.svg" alt="" width="24" height="24" />
+      </div>
+      <div class="icon-chip" aria-hidden="true">
+        <img src="assets/header-contact.svg" alt="" width="24" height="24" />
+      </div>
+      <div class="icon-chip" aria-hidden="true">
+        <img src="assets/header-notifications.svg" alt="" width="24" height="24" />
+      </div>
+      <div class="icon-chip" aria-hidden="true">
+        <img src="assets/header-download.svg" alt="" width="24" height="24" />
+      </div>
+      <div class="icon-chip" aria-hidden="true">
+        <img src="assets/header-email.svg" alt="" width="24" height="24" />
+      </div>
+      <div class="company-badge">
+        <img src="https://www.figma.com/api/mcp/asset/d9ef3756-c78b-4c24-ad87-8338077b9ad7" alt="Canyon Vista" />
+      </div>
+      <div class="avatar" aria-hidden="true">
+        <img class="avatar__ring" src="https://www.figma.com/api/mcp/asset/5363b44a-1cd6-4b13-9775-a85cabde4b6d" alt="" />
+        <img class="avatar__inner" src="https://www.figma.com/api/mcp/asset/8b08b2bb-1008-4424-abe4-324bc742fe3c" alt="" />
+        <span class="avatar__initials">EF</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="subnav" aria-label="Main">
+    <button type="button" class="subnav__tab">Dashboard</button>
+    <button type="button" class="subnav__tab subnav__tab--active" aria-current="page">Patients</button>
+    <button type="button" class="subnav__tab">Schedules</button>
+    <button type="button" class="subnav__tab">Shifts</button>
+    <button type="button" class="subnav__tab">Contacts</button>
+    <button type="button" class="subnav__tab">Labs</button>
+    <button type="button" class="subnav__tab">Reports</button>
+    <button type="button" class="subnav__tab">Templates</button>
+    <button type="button" class="subnav__tab">Queues</button>
+    <button type="button" class="subnav__tab">Inventory</button>
+    <button type="button" class="subnav__tab">Help</button>
+  </nav>
+
+  <div class="app-main">
+    <div class="overlay-dim" aria-hidden="true"></div>
+
+    <div class="modal-wrap">
+      <section class="scheduler-modal scheduler-modal--group" aria-labelledby="scheduler-title">
+        <div class="scheduler-modal__title-row">
+          <h1 id="scheduler-title" class="scheduler-modal__title">Scheduler</h1>
+          <button type="button" class="icon-btn-close" aria-label="Close scheduler">
+            <img src="assets/close.svg" alt="" width="24" height="24" />
+          </button>
+        </div>
+        <div class="modal-tabs" role="tablist">
+          <a href="index.html" class="modal-tabs__tab" role="tab" aria-selected="false">Appointments</a>
+          <a href="group-schedules.html" class="modal-tabs__tab modal-tabs__tab--active" role="tab" aria-selected="true" aria-current="page">Group Schedules</a>
+          <button type="button" class="modal-tabs__tab" role="tab" aria-selected="false">Custom Schedule</button>
+          <button type="button" class="modal-tabs__tab" role="tab" aria-selected="false">Combined Schedules</button>
+        </div>
+        <div class="modal-tabs__rule" role="presentation"></div>
+
+        <div class="modal-body">
+          <div class="modal-toolbar">
+            <div class="segmented" role="group" aria-label="Schedule list view" id="schedule-segmented">
+              <button type="button" class="segmented__btn segmented__btn--active" data-segment="current" aria-pressed="true">Current</button>
+              <button type="button" class="segmented__btn" data-segment="history" aria-pressed="false">History</button>
+            </div>
+            <div class="modal-toolbar__actions">
+              <button type="button" class="btn btn--outline btn--toolbar">
+                <span class="btn__icon" aria-hidden="true">
+                  <img src="assets/print-outlined.svg" alt="" width="14" height="14" />
+                </span>
+                print
+              </button>
+              <button type="button" class="btn btn--filled btn--toolbar">
+                <span class="btn__icon btn__icon--add" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 8.16667 8.16667" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                    <path d="M8.16667 4.66667H4.66667V8.16667H3.5V4.66667H0V3.5H3.5V0H4.66667V3.5H8.16667V4.66667Z" fill="#FFFFFF" />
+                  </svg>
+                </span>
+                add schedule
+              </button>
+            </div>
+          </div>
+
+          <div class="schedule-view" id="schedule-view-current" data-schedule-view="current">
+          <div class="schedule-list">
+            <article class="schedule-card schedule-card--expanded" data-schedule-card>
+              <div class="schedule-card__head">
+                <h2 class="schedule-card__title">IOP Night Schedule - 04/21/2025 to 04/21/2026</h2>
+                <div class="schedule-card__actions">
+                  <div class="schedule-card__icons" aria-label="Row actions">
+                    <button type="button" class="icon-action" aria-label="Refresh">
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use href="#schedule-icon-refresh" /></svg>
+                    </button>
+                    <button type="button" class="icon-action" aria-label="Calendar">
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use href="#schedule-icon-calendar" /></svg>
+                    </button>
+                    <button type="button" class="icon-action" aria-label="Edit">
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use href="#schedule-icon-edit" /></svg>
+                    </button>
+                    <button type="button" class="icon-action" aria-label="Delete">
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use href="#schedule-icon-delete" /></svg>
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    class="icon-action schedule-card__toggle"
+                    aria-expanded="true"
+                    aria-label="Collapse schedule"
+                    data-schedule-toggle
+                  >
+                    <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use class="schedule-card__chev-use" href="#schedule-icon-chevron-up" /></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="schedule-card__body" data-schedule-body>
+                <table class="schedule-table">
+                  <thead>
+                    <tr>
+                      <th class="col-day" scope="col">Day</th>
+                      <th class="col-sm" scope="col">Start Time</th>
+                      <th class="col-sm" scope="col">Duration</th>
+                      <th class="col-session" scope="col">Session Name</th>
+                      <th class="col-sm" scope="col">Assigned Start</th>
+                      <th class="col-sm" scope="col">Assigned End</th>
+                      <th class="col-sm" scope="col">Telehealth</th>
+                      <th class="col-sm" scope="col">Resources</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Monday</td>
+                      <td>05:00 PM</td>
+                      <td>01:00 Hr</td>
+                      <td>Relapse Prevention</td>
+                      <td>04/01/2025</td>
+                      <td>07/21/2026</td>
+                      <td>-</td>
+                      <td>-</td>
+                    </tr>
+                    <tr>
+                      <td>Wednesday</td>
+                      <td>05:00 PM</td>
+                      <td>01:00 Hr</td>
+                      <td>Relapse Prevention</td>
+                      <td>04/01/2025</td>
+                      <td>07/21/2026</td>
+                      <td>-</td>
+                      <td>-</td>
+                    </tr>
+                    <tr>
+                      <td>Saturday</td>
+                      <td>06:30 PM</td>
+                      <td>01:00 Hr</td>
+                      <td>Relapse Prevention</td>
+                      <td>04/01/2025</td>
+                      <td>07/21/2026</td>
+                      <td>-</td>
+                      <td>-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="schedule-card schedule-card--collapsed" data-schedule-card>
+              <div class="schedule-card__head">
+                <h2 class="schedule-card__title">Body Image Schedule - 04/21/2025 to 04/21/2026</h2>
+                <div class="schedule-card__actions">
+                  <div class="schedule-card__icons" aria-label="Row actions">
+                    <button type="button" class="icon-action" aria-label="Refresh">
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use href="#schedule-icon-refresh" /></svg>
+                    </button>
+                    <button type="button" class="icon-action" aria-label="Calendar">
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use href="#schedule-icon-calendar" /></svg>
+                    </button>
+                    <button type="button" class="icon-action" aria-label="Edit">
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use href="#schedule-icon-edit" /></svg>
+                    </button>
+                    <button type="button" class="icon-action" aria-label="Delete">
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use href="#schedule-icon-delete" /></svg>
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    class="icon-action schedule-card__toggle"
+                    aria-expanded="false"
+                    aria-label="Expand schedule"
+                    data-schedule-toggle
+                  >
+                    <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use class="schedule-card__chev-use" href="#schedule-icon-chevron-down" /></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="schedule-card__body" data-schedule-body hidden>
+                <table class="schedule-table">
+                  <thead>
+                    <tr>
+                      <th class="col-day" scope="col">Day</th>
+                      <th class="col-sm" scope="col">Start Time</th>
+                      <th class="col-sm" scope="col">Duration</th>
+                      <th class="col-session" scope="col">Session Name</th>
+                      <th class="col-sm" scope="col">Assigned Start</th>
+                      <th class="col-sm" scope="col">Assigned End</th>
+                      <th class="col-sm" scope="col">Telehealth</th>
+                      <th class="col-sm" scope="col">Resources</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="8" style="color: var(--gray-06); font-size: 14px;">No rows to display.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+          </div>
+
+          <div class="schedule-view" id="schedule-view-history" data-schedule-view="history" hidden>
+            <div class="schedule-list">
+              <article class="schedule-card schedule-card--expanded" data-schedule-card>
+                <div class="schedule-card__head">
+                  <h2 class="schedule-card__title">IOP Night Schedule - 04/21/2025 to 04/21/2026</h2>
+                  <div class="schedule-card__actions">
+                    <div class="schedule-card__icons" aria-label="Schedule actions">
+                      <button type="button" class="icon-action" aria-label="History">
+                        <img class="icon-action__img" src="assets/History-icon.svg" width="24" height="24" alt="" />
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="icon-action schedule-card__toggle"
+                      aria-expanded="true"
+                      aria-label="Collapse schedule"
+                      data-schedule-toggle
+                    >
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use class="schedule-card__chev-use" href="#schedule-icon-chevron-up" /></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="schedule-card__body" data-schedule-body>
+                  <table class="schedule-table">
+                    <thead>
+                      <tr>
+                        <th class="col-day" scope="col">Day</th>
+                        <th class="col-sm" scope="col">Start Time</th>
+                        <th class="col-sm" scope="col">Duration</th>
+                        <th class="col-session" scope="col">Session Name</th>
+                        <th class="col-sm" scope="col">Assigned Start</th>
+                        <th class="col-sm" scope="col">Assigned End</th>
+                        <th class="col-sm" scope="col">Telehealth</th>
+                        <th class="col-sm" scope="col">Resources</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Monday</td>
+                        <td>05:00 PM</td>
+                        <td>01:00 Hr</td>
+                        <td>Relapse Prevention</td>
+                        <td>04/01/2025</td>
+                        <td>07/21/2026</td>
+                        <td>-</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>Tuesday</td>
+                        <td>05:00 PM</td>
+                        <td>01:00 Hr</td>
+                        <td>Relapse Prevention</td>
+                        <td>04/01/2025</td>
+                        <td>07/21/2026</td>
+                        <td>-</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>Friday</td>
+                        <td>06:30 PM</td>
+                        <td>01:00 Hr</td>
+                        <td>Relapse Prevention</td>
+                        <td>04/01/2025</td>
+                        <td>07/21/2026</td>
+                        <td>-</td>
+                        <td>-</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <article class="schedule-card schedule-card--collapsed" data-schedule-card>
+                <div class="schedule-card__head">
+                  <h2 class="schedule-card__title">Fall Recovery Schedule - 09/01/2024 to 11/30/2024</h2>
+                  <div class="schedule-card__actions">
+                    <div class="schedule-card__icons" aria-label="Schedule actions">
+                      <button type="button" class="icon-action" aria-label="History">
+                        <img class="icon-action__img" src="assets/History-icon.svg" width="24" height="24" alt="" />
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="icon-action schedule-card__toggle"
+                      aria-expanded="false"
+                      aria-label="Expand schedule"
+                      data-schedule-toggle
+                    >
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use class="schedule-card__chev-use" href="#schedule-icon-chevron-down" /></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="schedule-card__body" data-schedule-body hidden>
+                  <table class="schedule-table">
+                    <thead>
+                      <tr>
+                        <th class="col-day" scope="col">Day</th>
+                        <th class="col-sm" scope="col">Start Time</th>
+                        <th class="col-sm" scope="col">Duration</th>
+                        <th class="col-session" scope="col">Session Name</th>
+                        <th class="col-sm" scope="col">Assigned Start</th>
+                        <th class="col-sm" scope="col">Assigned End</th>
+                        <th class="col-sm" scope="col">Telehealth</th>
+                        <th class="col-sm" scope="col">Resources</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colspan="8" style="color: var(--gray-06); font-size: 14px;">No rows to display.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <article class="schedule-card schedule-card--collapsed" data-schedule-card>
+                <div class="schedule-card__head">
+                  <h2 class="schedule-card__title">Holiday Support Schedule - 12/01/2024 to 01/15/2025</h2>
+                  <div class="schedule-card__actions">
+                    <div class="schedule-card__icons" aria-label="Schedule actions">
+                      <button type="button" class="icon-action" aria-label="History">
+                        <img class="icon-action__img" src="assets/History-icon.svg" width="24" height="24" alt="" />
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="icon-action schedule-card__toggle"
+                      aria-expanded="false"
+                      aria-label="Expand schedule"
+                      data-schedule-toggle
+                    >
+                      <svg class="icon-action__svg" width="24" height="24" aria-hidden="true" focusable="false"><use class="schedule-card__chev-use" href="#schedule-icon-chevron-down" /></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="schedule-card__body" data-schedule-body hidden>
+                  <table class="schedule-table">
+                    <thead>
+                      <tr>
+                        <th class="col-day" scope="col">Day</th>
+                        <th class="col-sm" scope="col">Start Time</th>
+                        <th class="col-sm" scope="col">Duration</th>
+                        <th class="col-session" scope="col">Session Name</th>
+                        <th class="col-sm" scope="col">Assigned Start</th>
+                        <th class="col-sm" scope="col">Assigned End</th>
+                        <th class="col-sm" scope="col">Telehealth</th>
+                        <th class="col-sm" scope="col">Resources</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colspan="8" style="color: var(--gray-06); font-size: 14px;">No rows to display.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      document.querySelectorAll("[data-schedule-toggle]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var card = btn.closest("[data-schedule-card]");
+          if (!card) return;
+          var body = card.querySelector("[data-schedule-body]");
+          var expanded = !card.classList.contains("schedule-card--expanded");
+          card.classList.toggle("schedule-card--expanded", expanded);
+          card.classList.toggle("schedule-card--collapsed", !expanded);
+          if (body) body.hidden = !expanded;
+          btn.setAttribute("aria-expanded", expanded ? "true" : "false");
+          btn.setAttribute("aria-label", expanded ? "Collapse schedule" : "Expand schedule");
+          var chevUse = btn.querySelector(".schedule-card__chev-use");
+          if (chevUse) {
+            chevUse.setAttribute("href", expanded ? "#schedule-icon-chevron-up" : "#schedule-icon-chevron-down");
+          }
+        });
+      });
+
+      var seg = document.getElementById("schedule-segmented");
+      var viewCurrent = document.getElementById("schedule-view-current");
+      var viewHistory = document.getElementById("schedule-view-history");
+
+      function setScheduleView(view) {
+        if (!viewCurrent || !viewHistory) return;
+        var isHistory = view === "history";
+        viewCurrent.hidden = isHistory;
+        viewHistory.hidden = !isHistory;
+        if (seg) {
+          seg.querySelectorAll(".segmented__btn").forEach(function (x) {
+            var on = x.getAttribute("data-segment") === view;
+            x.classList.toggle("segmented__btn--active", on);
+            x.setAttribute("aria-pressed", on ? "true" : "false");
+          });
+        }
+      }
+
+      if (seg) {
+        seg.querySelectorAll(".segmented__btn").forEach(function (b) {
+          b.addEventListener("click", function () {
+            var v = b.getAttribute("data-segment");
+            if (v) setScheduleView(v);
+          });
+        });
+      }
+
+      setScheduleView("current");
+    })();
+  </script>
+</body>
+</html>

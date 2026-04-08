@@ -1,0 +1,1139 @@
+:root {
+  --purple-main: #6c18c9;
+  --blue-main: #1565c0;
+  --gray-black: #000000;
+  --gray-07: #333333;
+  --gray-06: #666666;
+  --gray-05: #999999;
+  --gray-04: #cccccc;
+  --gray-03: #ececec;
+  --gray-02: #f0f0f0;
+  --white: #ffffff;
+  --light-blue-300: #dbeafe;
+  /* Figma Light Blue / light blue-500-main — large switch track when ON */
+  --light-blue-500-main: #cadffe;
+  /* Big Button / interactive hover (Kipu DS) */
+  --blue-hover: #0f4888;
+  --blue-tint-hover-bg: #eff5ff;
+  --purple-hover: #4d118f;
+  --shadow-modal: 0 2px 20px rgba(0, 0, 0, 0.08);
+  --shadow-elevated: 0 4px 32px rgba(0, 0, 0, 0.1);
+  --shadow-nav: 0 2px 16px rgba(0, 0, 0, 0.08);
+  --font-body: 14px/20px "Roboto", system-ui, sans-serif;
+  --font-title: 16px/20px "Roboto", system-ui, sans-serif;
+  --font-caption: 12px/14px "Roboto", system-ui, sans-serif;
+  --font-h2: 700 24px/28px "Roboto", system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  font: var(--font-body);
+  color: var(--gray-black);
+  background: var(--white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+}
+
+/* Main stage (dim + modal): full width; padding keeps modal off edges and adds room below */
+.app-main {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: calc(100vh - 110px);
+  padding: 24px 16px 96px;
+  box-sizing: border-box;
+  background: var(--white);
+}
+
+/* —— Header —— */
+.global-header {
+  width: 100%;
+  height: 70px;
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  padding: 0 13px 0 14px;
+  color: var(--white);
+  flex-shrink: 0;
+}
+.global-header__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  z-index: 0;
+}
+.global-header__left {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.app-grid-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: var(--purple-main);
+  display: grid;
+  place-items: center;
+  border: none;
+  padding: 0;
+  cursor: default;
+}
+.app-grid-btn img {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+  aspect-ratio: 1;
+}
+.logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 0;
+  flex-shrink: 0;
+}
+.logo-lockup img { height: 22px; width: auto; display: block; }
+.logo-lockup span {
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--white);
+}
+
+.facility-pill {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  min-width: min(380px, 100%);
+  max-width: 380px;
+  flex: 0 1 auto;
+  margin-left: 8px;
+  padding: 0 14px;
+  background: var(--purple-main);
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  gap: 12px;
+}
+.facility-pill__location {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.facility-pill__time {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.facility-pill__divider {
+  width: 1px;
+  height: 25px;
+  background: rgba(255, 255, 255, 0.35);
+  margin: 0 4px;
+}
+.facility-pill__chev {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  flex-shrink: 0;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+}
+.facility-pill__chev img {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
+  display: block;
+  object-fit: contain;
+  aspect-ratio: 1;
+  filter: brightness(0) invert(1);
+}
+
+.global-header__right {
+  position: relative;
+  z-index: 1;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.icon-chip {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border-radius: 50%;
+  transition: background-color 0.15s ease;
+}
+.icon-chip:hover {
+  background: var(--purple-hover);
+}
+.icon-chip img {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+  aspect-ratio: 1;
+}
+
+.company-badge {
+  background: var(--white);
+  border-radius: 4px;
+  padding: 5px 10px;
+  height: 50px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.company-badge img {
+  max-width: 80px;
+  max-height: 40px;
+  object-fit: contain;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  flex-shrink: 0;
+}
+.avatar__ring {
+  position: absolute;
+  inset: 0;
+  width: 44px;
+  height: 44px;
+}
+.avatar__inner {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 36px;
+  height: 36px;
+}
+.avatar__initials {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--white);
+}
+
+/* —— Sub navigation —— */
+.subnav {
+  width: 100%;
+  height: 40px;
+  position: relative;
+  z-index: 19;
+  background: var(--white);
+  box-shadow: var(--shadow-nav);
+  display: flex;
+  align-items: stretch;
+  padding: 0 0 0 14px;
+  flex-shrink: 0;
+}
+.subnav__tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--gray-black);
+  background: none;
+  border: none;
+  border-bottom: 4px solid transparent;
+  cursor: default;
+  font-family: inherit;
+}
+.subnav__tab--active {
+  color: var(--blue-main);
+  border-bottom-color: var(--blue-main);
+}
+
+/* —— Overlay + modal —— */
+.overlay-dim {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  min-height: 100%;
+  background: var(--gray-07);
+  opacity: 0.2;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.modal-wrap {
+  position: relative;
+  z-index: 10;
+  width: min(1580px, calc(100% - 32px));
+  max-width: 1580px;
+  margin: 0 auto;
+  filter: drop-shadow(0 2px 20px rgba(0, 0, 0, 0.08));
+}
+
+.scheduler-modal {
+  background: var(--white);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  min-height: 906px;
+}
+
+/* Toolbar small buttons — Figma 354:16046 / 354:16047: 14×14 icon slot, 8px gap to label */
+.scheduler-modal .btn--toolbar {
+  min-height: 38px;
+  height: 38px;
+}
+
+.scheduler-modal .btn__icon {
+  flex: 0 0 14px;
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scheduler-modal .btn__icon img {
+  width: 14px;
+  height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+  display: block;
+  object-fit: contain;
+}
+
+/* Add schedule: exact 14×14 px glyph (Figma 354:16046) */
+.scheduler-modal .btn__icon--add svg {
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.scheduler-modal .btn--filled .btn__icon img {
+  filter: none;
+}
+
+.scheduler-modal .outlined-field__icon,
+.scheduler-modal .outlined-field__icon--clock {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.scheduler-modal .outlined-field__icon img,
+.scheduler-modal .outlined-field__icon--clock img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+}
+
+.scheduler-modal .info-banner__icon {
+  width: 24px;
+  height: 24px;
+}
+
+.scheduler-modal .info-banner__icon img {
+  width: 24px;
+  height: 24px;
+}
+
+.scheduler-modal__title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 26px 32px 0;
+}
+.scheduler-modal__title {
+  font: var(--font-h2);
+  margin: 0;
+  color: var(--gray-black);
+}
+.icon-btn-close {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.icon-btn-close img,
+.icon-btn-close svg {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  display: block;
+}
+
+.modal-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 33px;
+  margin-top: 12px;
+}
+.modal-tabs__tab {
+  padding: 14px 24px;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: inherit;
+  background: none;
+  border: none;
+  border-bottom: 4px solid transparent;
+  color: var(--gray-black);
+  cursor: default;
+}
+.modal-tabs__tab--active {
+  color: var(--blue-main);
+  border-bottom-color: var(--blue-main);
+}
+
+.modal-tabs__rule {
+  height: 1px;
+  background: var(--gray-04);
+  margin: 0 32px;
+}
+
+.modal-body {
+  padding: 32px 32px 32px;
+}
+
+.form-card {
+  position: relative;
+  background: var(--white);
+  border: 2px solid var(--white);
+  border-radius: 8px;
+  box-shadow: var(--shadow-modal);
+  padding: 24px 24px 28px;
+}
+
+.form-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+.form-card__title {
+  font: var(--font-h2);
+  margin: 0;
+}
+
+.form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1450px;
+  margin: 0 auto;
+}
+
+.row-switch {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.row-switch--tight { gap: 10px; }
+
+/* Switches */
+.switch {
+  position: relative;
+  width: 34px;
+  height: 22px;
+  flex-shrink: 0;
+}
+/*
+ * Large switch ON: Figma Scheduler — node 354:15587 (Switches / 300:6505 type On).
+ * Frame 56×40; track 30×14 #CADFFE at left 13px top 13px; thumb 22×22 at left 25px top 9px (solid blue).
+ */
+.switch--lg {
+  width: 56px;
+  height: 40px;
+  overflow: visible;
+}
+.switch__track {
+  position: absolute;
+  right: 0;
+  top: 4px;
+  width: 30px;
+  height: 14px;
+  background: var(--gray-04);
+  border-radius: 7px;
+}
+.switch--lg .switch__track {
+  left: 13px;
+  right: auto;
+  top: 13px;
+}
+.switch__thumb {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+}
+.switch--lg .switch__thumb {
+  left: 9px;
+  top: 9px;
+}
+.switch__thumb-inner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+button.switch {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+button.switch:focus-visible {
+  outline: 2px solid var(--blue-main);
+  outline-offset: 2px;
+}
+.switch.switch--lg[aria-checked="true"] .switch__track {
+  left: 13px;
+  right: auto;
+  top: 13px;
+  background-color: var(--light-blue-500-main);
+}
+.switch.switch--lg[aria-checked="true"] .switch__thumb {
+  left: 25px;
+  right: auto;
+  top: 9px;
+}
+.switch.switch--lg[aria-checked="true"] .switch__thumb-inner {
+  background: var(--blue-main);
+  border: none;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 3px 8px rgba(21, 101, 192, 0.28);
+}
+
+.field-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.field-row--time {
+  gap: 25px;
+  align-items: center;
+}
+
+.outlined-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.outlined-field--loc { flex: 1 1 1083px; max-width: 1083px; }
+.outlined-field--sm { flex: 0 0 351px; max-width: 351px; }
+.outlined-field--time { flex: 0 0 200px; max-width: 200px; }
+.outlined-field--full { width: 100%; }
+
+/* Ensure flex on .outlined-field cannot show this block while switch is off */
+#external-contact-field[hidden] {
+  display: none !important;
+}
+
+/* Same focused field look as Location (2px blue); no extra outline so it matches the static Location chrome */
+button.outlined-field__box--focus:focus-visible {
+  outline: none;
+}
+
+/* Figma: with External ON, Location uses default gray border/label (focus moves to External Contact) */
+.form-card[data-external-appointment="on"] #location-field .outlined-field__box--focus {
+  border-width: 1px;
+  border-color: var(--gray-04);
+  padding: 14px 10px 12px 14px;
+}
+.form-card[data-external-appointment="on"] #location-field .outlined-field__label--focus {
+  color: var(--gray-06);
+}
+
+.outlined-field__label {
+  position: absolute;
+  left: 12px;
+  top: 0;
+  transform: translateY(-50%);
+  z-index: 1;
+  background: var(--white);
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 12px;
+  color: var(--gray-06);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  max-width: calc(100% - 24px);
+  pointer-events: none;
+}
+.outlined-field__label--focus {
+  color: var(--blue-main);
+}
+
+.outlined-field__box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 14px 10px 12px 14px;
+  border: 1px solid var(--gray-04);
+  border-radius: 4px;
+  background: var(--white);
+}
+.outlined-field__box--focus {
+  border-width: 2px;
+  border-color: var(--blue-main);
+  padding: 13px 9px 11px 13px;
+}
+
+button.outlined-field__box {
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+}
+button.outlined-field__box:focus-visible {
+  outline: 2px solid var(--blue-main);
+  outline-offset: 2px;
+  border-color: var(--blue-main);
+}
+
+.outlined-field__value {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.outlined-field__value--muted { color: var(--gray-05); }
+.outlined-field__value--dark { color: var(--gray-black); }
+
+.outlined-field__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+.outlined-field__icon--clock {
+  width: 18px;
+  height: 18px;
+}
+.outlined-field__icon img,
+.outlined-field__icon--clock img {
+  width: 18px;
+  height: 18px;
+  display: block;
+  object-fit: contain;
+}
+
+.info-banner__icon img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.info-banner {
+  flex: 1 1 546px;
+  max-width: 546px;
+  min-height: 46px;
+  background: var(--light-blue-300);
+  border-radius: 8px;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.info-banner__icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.info-banner__icon img { width: 100%; height: 100%; display: block; }
+.info-banner__text {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--gray-black);
+}
+
+.divider {
+  height: 1px;
+  background: var(--gray-04);
+  width: 100%;
+}
+
+.textarea-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 97px;
+}
+.textarea-box {
+  position: absolute;
+  inset: 7px 0 0 0;
+  border: 1px solid var(--gray-04);
+  border-radius: 4px;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  min-height: 90px;
+}
+.textarea-box__main {
+  padding: 14px 12px 4px;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--gray-05);
+}
+.textarea-box__grab {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 4px 4px;
+}
+.textarea-resize-grip {
+  width: 10px;
+  height: 10px;
+  opacity: 0.55;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 35%,
+    var(--gray-04) 35%,
+    var(--gray-04) 40%,
+    transparent 40%,
+    transparent 55%,
+    var(--gray-04) 55%,
+    var(--gray-04) 60%,
+    transparent 60%,
+    transparent 75%,
+    var(--gray-04) 75%,
+    var(--gray-04) 80%,
+    transparent 80%
+  );
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 18px;
+  margin-top: 24px;
+  padding-right: 8px;
+}
+/* Big Button — Roboto Medium 16px uppercase, height 40px, pill 100px */
+.btn {
+  min-width: 120px;
+  height: 40px;
+  border-radius: 100px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.btn--text {
+  background: transparent;
+  border: 2px solid transparent;
+  color: var(--blue-main);
+}
+.btn--text:hover {
+  background: var(--blue-tint-hover-bg);
+  color: var(--blue-hover);
+}
+.btn--outline {
+  background: transparent;
+  border: 2px solid var(--blue-main);
+  color: var(--blue-main);
+}
+.btn--outline:hover {
+  background: var(--blue-tint-hover-bg);
+  border-color: var(--blue-hover);
+  color: var(--blue-hover);
+}
+.btn--filled {
+  background: var(--blue-main);
+  border: 2px solid var(--blue-main);
+  color: var(--white);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+}
+.btn--filled:hover {
+  background: var(--blue-hover);
+  border-color: var(--blue-hover);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btn--filled .btn__icon {
+  color: var(--white);
+}
+
+@media (max-width: 1200px) {
+  .facility-pill {
+    margin-left: 0;
+    margin-top: 4px;
+    flex-basis: 100%;
+    max-width: none;
+  }
+  .global-header {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 70px;
+    padding-bottom: 8px;
+  }
+  .app-main {
+    padding: 16px 12px 72px;
+    min-height: calc(100vh - 100px);
+  }
+  .field-row--time { flex-direction: column; align-items: stretch; }
+  .info-banner { max-width: none; }
+}
+
+/* Tab links (cross-page scheduler views) */
+a.modal-tabs__tab {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+a.modal-tabs__tab:not(.modal-tabs__tab--active):hover {
+  color: var(--blue-main);
+}
+
+/* —— Group Schedules (Figma 354:16019) —— */
+.scheduler-modal--group {
+  min-height: auto;
+}
+
+.modal-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.segmented {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.segmented__btn {
+  position: relative;
+  border: 2px solid var(--gray-04);
+  background: var(--white);
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 20px;
+  cursor: pointer;
+  margin: 0;
+  color: var(--gray-07);
+  font-weight: 400;
+}
+
+.segmented__btn:first-child {
+  border-radius: 100px 0 0 100px;
+  padding: 12px 16px 12px 24px;
+  border-right-width: 1px;
+  margin-right: -1px;
+}
+
+.segmented__btn:last-child {
+  border-radius: 0 100px 100px 0;
+  padding: 12px 24px 12px 16px;
+  border-left-width: 1px;
+}
+
+.segmented__btn--active {
+  background: var(--light-blue-300);
+  color: var(--gray-black);
+  font-weight: 500;
+  z-index: 1;
+}
+
+.modal-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.btn--toolbar {
+  min-width: 0;
+  height: 38px;
+  font-size: 14px;
+  line-height: normal;
+  padding: 10px 20px 10px 12px;
+  gap: 8px;
+}
+
+.btn--toolbar.btn--outline {
+  padding-left: 12px;
+  padding-right: 20px;
+}
+
+.btn--toolbar.btn--filled {
+  padding-left: 12px;
+  padding-right: 20px;
+  min-width: 155px;
+}
+
+.btn__icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.btn__icon svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
+.schedule-view[hidden] {
+  display: none !important;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1518px;
+  margin: 0 auto;
+  padding-top: 16px;
+}
+
+.schedule-card {
+  border-radius: 12px;
+  background: var(--white);
+}
+
+.schedule-card--expanded {
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.14);
+  padding: 16px 24px 24px;
+}
+
+.schedule-card--collapsed {
+  border: 1px solid var(--gray-02);
+  padding: 16px 24px;
+}
+
+.schedule-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.schedule-card__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--gray-black);
+}
+
+.schedule-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.schedule-card__icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.schedule-card-icon-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.icon-action {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+/* Schedule card row icons: circular hover, #EFF5FF / icon #0F4888 */
+.schedule-card .icon-action {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 50%;
+  color: var(--gray-06);
+}
+
+.schedule-card .icon-action:hover {
+  background-color: var(--blue-tint-hover-bg);
+  color: var(--blue-hover);
+}
+
+.schedule-card .icon-action:focus-visible {
+  outline: 2px solid var(--blue-main);
+  outline-offset: 2px;
+}
+
+.icon-action__svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.schedule-card .icon-action__img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.schedule-card__body {
+  margin-top: 24px;
+  overflow-x: auto;
+}
+
+.schedule-card__body[hidden] {
+  display: none !important;
+}
+
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  line-height: 20px;
+  min-width: 1100px;
+}
+
+.schedule-table th {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-06);
+  padding: 4px 8px 8px;
+  vertical-align: bottom;
+  border-bottom: 1px solid var(--gray-04);
+}
+
+.schedule-table td {
+  padding: 8px;
+  height: 36px;
+  box-sizing: border-box;
+  color: var(--gray-black);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.schedule-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.schedule-table .col-day {
+  width: 18%;
+  min-width: 200px;
+}
+
+.schedule-table .col-sm {
+  width: 9%;
+  min-width: 120px;
+}
+
+.schedule-table .col-session {
+  width: 28%;
+  min-width: 260px;
+}
